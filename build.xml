@@ -1,48 +1,124 @@
-<?xml version="1.0" encoding="UTF-8"?>
-<project name="Simple Project analyzed with the SonarQube Scanner for Ant" default="all" basedir="." xmlns:sonar="antlib:org.sonar.ant">
-
-	<!-- ========= Define the main properties of this project ========= -->
-	<property name="src.dir" value="src" />
-	<property name="build.dir" value="target" />
-	<property name="classes.dir" value="${build.dir}/classes" />
-	
-	<!-- Define the SonarQube global properties (the most usual way is to pass these properties via the command line) -->
-	<property name="sonar.host.url" value="http://10.104.36.21" />
-
-	<!-- Define the Sonar properties -->
-	<property name="sonar.projectKey" value="org.sonarqube:sonarqube-scanner-ant" />
-	<property name="sonar.projectName" value="Example of SonarQube Scanner for Ant Usage" />
-	<property name="sonar.projectVersion" value="1.0" />
-	<property name="sonar.sources" value="src" />
-	<property name="sonar.binaries" value="target" />
-	<property name="sonar.sourceEncoding" value="UTF-8" />
-	
-	<!-- ========= Define "regular" targets: clean, compile, ... ========= -->
-	<target name="clean">
-		<delete dir="${build.dir}" />
-	</target>
-
-	<target name="init">
-		<mkdir dir="${build.dir}" />
-		<mkdir dir="${classes.dir}" />
-	</target>
-
-	<target name="compile" depends="init">
-		<javac srcdir="${src.dir}" destdir="${classes.dir}" fork="true" debug="true" includeAntRuntime="false" />
-	</target>
-
-	<!-- ========= Define SonarQube Scanner for Ant Target ========= -->
-	<target name="sonar" depends="compile">
-		<taskdef uri="antlib:org.sonar.ant" resource="org/sonar/ant/antlib.xml">
-			<!-- Update the following line, or put the "sonar-ant-task-*.jar" file in your "$HOME/.ant/lib" folder -->
-			<classpath path="/var/lib/jenkins/tools.hudson.tasks.Ant_AntInstallation/ANT-HOME/lib" />
-		</taskdef>
-		
-		<!-- Execute SonarQube Scanner for Ant Analysis -->
-		<sonar:sonar />
-	</target>
-
-	<!-- ========= The main target "all" ========= -->
-	<target name="all" depends="clean,compile,sonar" />
-
+<?xml version = '1.0' encoding = 'windows-1251'?>
+ 
+<project name="abc" default="build" basedir=".">
+ <!-- Define the Sonar task if this hasn't been done in a common script -->
+ <taskdef uri="antlib:org.sonar.ant" resource="org/sonar/ant/antlib.xml">
+  <classpath path="$WORKSPACE/tools.hudson.tasks.Ant_AntInstallation/ANT-HOME/lib" />
+ </taskdef>
+ <!-- Out-of-the-box those parameters are optional -->
+ <property name="sonar.jdbc.url" value="jdbc:oracle:thin:@xyz/sirius.xyz" />
+ <property name="sonar.jdbc.driverClassName" value="oracle.jdbc.driver.OracleDriver" />
+ <property name="sonar.jdbc.username" value="sonar" />
+ <property name="sonar.jdbc.password" value="sonar" />
+ <!-- Additional Sonar configuration (PMD need 1.5 when using annotations)-->
+ <property name="sonar.java.source" value="1.5"/>
+ <property name="sonar.java.target" value="1.5"/>
+ 
+ 
+ <!-- SERVER ON A REMOTE HOST -->
+ <property name="sonar.host.url" value="http://10.104.36.21" />
+ 
+ 
+ <property name="ear.file" value="konfiskat.ear"/>
+ 
+ <property file="build.properties"/>
+ 
+ <property name="build.dir"    value="build"/>
+ <property name="classes.dir"  value="${build.dir}/classes"/>
+ <property name="classes2.dir" value="classes"/>
+ <property name="deploy.dir"   value="deploy"/>
+ <property name="doc.dir"      value="docs"/>
+ <property name="jar.dir"      value="${build.dir}/jar"/>
+ <property name="lib.dir.1"    value="lib"/>
+ <property name="lib.dir.2"    value="${lib.common.dir}"/>
+ <property name="lib.dir.3"    value="common_lib"/>
+ <property name="lib.dir.4"    value="${jdev.libs.dir}"/>
+ <property name="src.dir"      value="src"/>
+ <property name="config.dir"   value="${src.dir}/META-INF"/>
+ <property name="temp.dir"   value="${src.dir}/temp"/>
+ 
+ <path id="classpath">
+  <fileset dir="${lib.dir.3}" includes="**/*.jar"/>
+  <fileset dir="${lib.dir.2}" includes="**/com.ibm.mq.jar, **/jboss-j2ee.jar"/>
+  <fileset dir="${lib.dir.4}" includes="**/*.jar"/>
+ </path>
+ 
+ <path id="srcpath">
+  <pathelement location="${src.dir}"/>
+ </path>
+ <!-- Add the target -->
+ <target name="sonar">
+  <!-- The workDir directory is used by Sonar to store temporary files -->
+  <sonar:sonar workDir="${temp.dir}" key="org.example:example" version="0.1-SNAPSHOT" xmlns:sonar="antlib:org.sonar.ant">
+ 
+   <!-- source directories (required) -->
+   <sources>
+    <path location="${src.dir}" />
+   </sources>
+ 
+   <!-- binaries directories, which contain for example the compiled Java bytecode (optional) -->
+   <binaries>
+    <path location="${classes.dir}" />
+   </binaries>
+ 
+   <!-- path to libraries (optional). These libraries are for example used by the Java Findbugs plugin -->
+   <libraries>
+    <path refid="classpath"/>
+   </libraries>
+  </sonar:sonar>
+ </target>
+ 
+ <target name="clean">
+ </target>
+ 
+ <target name="init" depends="clean"/>
+ 
+ <target name="compile" depends="init">
+  <mkdir dir="${classes.dir}"/>
+  <javac destdir="${classes.dir}"
+    classpathref="classpath"
+    debug="on">
+   <src refid="srcpath"/>
+  </javac>
+ </target>
+ 
+ <target name="doc" depends="compile">
+ 
+ </target>
+ 
+ <target name="build" depends="doc">
+  <mkdir dir="${jar.dir}"/>
+  <jar destfile="${jar.dir}/toOAS.jar">
+   <manifest>
+    <attribute name="Class-Path" value="com.ibm.mq.jar xercesImpl.jar"/>
+   </manifest>
+   <metainf dir="${config.dir}">
+    <include name="ejb-jar.xml"/>
+    <include name="orion-ejb-jar.xml"/>
+   </metainf>
+   <fileset dir="${classes.dir}">
+    <include name="**/*.*"/>
+   </fileset>
+   <fileset dir="${src.dir}">
+    <include name="*.properties"/>
+   </fileset>
+  </jar>
+ 
+  <mkdir dir="${deploy.dir}"/>
+ 
+  <echo file="${jar.dir}/application.xml"><![CDATA[<?xml version="1.0" encoding="UTF-8"?> <application> <display-name>ReadMQ</display-name> <module> <ejb>toOAS.jar</ejb> </module> </application>]]>
+  </echo>
+ 
+  <ear destfile="${deploy.dir}/${ear.file}"
+    appxml="${jar.dir}/application.xml">
+   <fileset dir="${jar.dir}" includes="*.jar"/>
+   <fileset dir="${lib.dir.2}">
+    <include name="com.ibm.mq.jar"/>
+    <include name="xercesImpl.jar"/>
+   </fileset>
+  </ear>
+ 
+ </target>
+ 
+ <target name="all" depends="build"/>
 </project>
