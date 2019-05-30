@@ -17,7 +17,7 @@
 	<property name="sonar.projectName" value="ant-sonar" />
 	<property name="sonar.projectVersion" value="1.0" />
 	<property name="sonar.sources" value="src" />
-	<property name="sonar.binaries" value="build" />
+		<property name="sonar.java.binaries" value="build/classes/piona" />
 		<property name="sonar.sourceEncoding" value="UTF-8" />
 
 
