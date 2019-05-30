@@ -7,6 +7,7 @@
     <property name="classes.dir" value="${build.dir}/classes"/>
     <property name="jar.dir"     value="${build.dir}/jar"/>
     <property name="doc.dir"     value="doc"/>
+    
 	
 		<!-- Define the SonarQube global properties (the most usual way is to pass these properties via the command line) -->
 	<property name="sonar.host.url" value="http://10.104.36.21:9000" />
@@ -18,6 +19,8 @@
 	<property name="sonar.sources" value="src" />
 	<property name="sonar.binaries" value="target" />
 	<property name="sonar.sourceEncoding" value="UTF-8" />
+	<property name="sonar.java.binaries" value="build" />
+<property name="sonar.java.libraries" value="$workspace/tools.hudson.tasks.Ant_AntInstallation/ANT-HOME/lib/*.jar" />
 
     <!-- targets -->
     <target name="compile" description="compile project">
