@@ -10,16 +10,14 @@
     
 	
 		<!-- Define the SonarQube global properties (the most usual way is to pass these properties via the command line) -->
-	<property name="sonar.host.url" value="http://10.104.36.21:9000" />
+	<property name="sonar.host.url" value="http://10.104.36.21" />
 
 	<!-- Define the Sonar properties -->
 	<property name="sonar.projectKey" value="anthome" />
 	<property name="sonar.projectName" value="ant-sonar" />
 	<property name="sonar.projectVersion" value="1.0" />
 	<property name="sonar.sources" value="src" />
-	<property name="sonar.java.binaries" value="build" />
-	<property name="sonar.java.libraries" value="lib/*.jar" />
-	<property name="sonar.sourceEncoding" value="UTF-8" />
+		<property name="sonar.sourceEncoding" value="UTF-8" />
 
 
     <!-- targets -->
