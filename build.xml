@@ -20,7 +20,7 @@
 	<property name="sonar.binaries" value="target" />
 	<property name="sonar.sourceEncoding" value="UTF-8" />
 	<property name="sonar.java.binaries" value="build" />
-<property name="sonar.java.libraries" value="$workspace/tools.hudson.tasks.Ant_AntInstallation/ANT-HOME/lib/*.jar" />
+<property name="sonar.java.libraries" value="lib/*.jar" />
 
     <!-- targets -->
     <target name="compile" description="compile project">
