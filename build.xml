@@ -13,14 +13,13 @@
 	<property name="sonar.host.url" value="http://10.104.36.21:9000" />
 
 	<!-- Define the Sonar properties -->
-	<property name="sonar.projectKey" value="org.sonarqube:sonarqube-scanner-ant" />
+	<property name="sonar.projectKey" value="anthome" />
 	<property name="sonar.projectName" value="ant-sonar" />
 	<property name="sonar.projectVersion" value="1.0" />
 	<property name="sonar.sources" value="src" />
 	<property name="sonar.binaries" value="target" />
 	<property name="sonar.sourceEncoding" value="UTF-8" />
-	<property name="sonar.java.binaries" value="build" />
-<property name="sonar.java.libraries" value="lib/*.jar" />
+
 
     <!-- targets -->
     <target name="compile" description="compile project">
